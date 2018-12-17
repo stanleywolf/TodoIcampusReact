@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import TodoContext from '../../AppContext'
 class InputBar extends Component {
     constructor(){
       super()
@@ -24,10 +24,17 @@ onAdd = () =>{
           type="text" 
           placeholder='Task name...' 
           value={this.state.value}>
-          </input>
-        <button 
-          onClick={this.onAdd}
-          type='submit'>Add</button>
+        </input>
+          <TodoContext.Consumer>
+           {(actions) => {
+             return(
+              <button 
+                onClick={() =>{
+                  actions.onAdd(this.state.value)
+                }} type='submit'>Add
+              </button>
+             )}}
+          </TodoContext.Consumer>
       </div>
     );
   }

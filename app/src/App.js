@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 import InputBar from './components/inputBar/inputBar';
 import TodoList from './components/TodoList/todoList';
+import TodosContext from './AppContext'
+
 
 class TodoIcampusReact extends Component {
 
@@ -31,12 +33,30 @@ class TodoIcampusReact extends Component {
     })
     this.setState(state)
   }
-  render() {
+  onDone =(id) =>{
+    const {todos} = this.state
 
+    this.setState({
+      todos:todos.map((todo) =>{
+        return {
+          ...todo,
+          isDone:todo.id === id ? !todo.isDone : todo.isDone
+        }
+      })
+    })
+  }
+  render() {
+    const actions = {
+      onAdd: this.onAdd,
+      onRemove: this.onRemove,
+      onDone: this.onDone,
+    }
     return (
       <div className="container">
-        <InputBar onAdd={this.onAdd}/>
-        <TodoList onRemove={this.onRemove} todos={this.state.todos} />            
+        <TodosContext.Provider value={actions}>
+          <InputBar />
+           <TodoList todos={this.state.todos} /> 
+           </TodosContext.Provider>           
       </div>
     );
   }
